@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuantJuice - Smarter Stock Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Navbar -->
+<!-- Signup Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Create Account</h5>
+      <input type="email" id="signupEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="signupPassword" class="form-control mb-3" placeholder="Password">
+      <button id="signupBtn" class="btn btn-primary w-100 mb-2" onclick="signup()">Sign Up</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Login</h5>
+      <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
+      <button id="loginBtn" class="btn btn-success w-100 mb-2" onclick="login()">Login</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-3 text-primary" href="#">QuantJuice</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Market</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Market Overview</a></li>
+            <li><a class="dropdown-item" href="#">Top Gainers/Losers</a></li>
+            <li><a class="dropdown-item" href="#">Volume Spike</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Screeners</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Basic Screeners</a></li>
+            <li><a class="dropdown-item" href="#">Advanced Screeners (Pro)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Tools</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Watchlist & Alerts (Free)</a></li>
+            <li><a class="dropdown-item" href="#">Backtesting (Pro)</a></li>
+            <li><a class="dropdown-item" href="#">Options Lab (Pro)</a></li>
+            <li><a class="dropdown-item" href="#">AI Signals (Pro)</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+
+        <li class="nav-item dropdown">
+            <a class="btn btn-account ms-3 dropdown-toggle" href="#" data-bs-toggle="dropdown">Account</a>
+            <ul class="dropdown-menu dropdown-menu-end"> <!-- Added dropdown-menu-end for perfect alignment -->
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container text-center py-5">
+    <h1 class="display-4 fw-bold">Smarter Stock Analytics, Simplified.</h1>
+    <p class="lead">AI-powered screeners, backtests, technical analysis & more for India and US markets.</p>
+    <a href="#" class="btn btn-lg btn-success m-2">Start Free</a>
+    <a href="#" class="btn btn-lg btn-outline-primary m-2">View Pricing</a>
+  </div>
+</section>
+
+<!-- Live Market Strip -->
+<section class="market-strip py-3">
+  <div class="container d-flex justify-content-center" id="marketData">
+    <!-- Market data will load here -->
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">QuantJuice Offers</h2>
+      <p class="lead">Free tools for everyone. Powerful analytics for serious traders.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card p-4 shadow-sm rounded text-center bg-white">
+          <h5>Public Access</h5>
+          <p>Market data, simple screeners, top movers — fully free to explore and analyze.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card p-4 shadow-sm rounded text-center bg-white">
+          <h5>Free Members</h5>
+          <p>Save watchlists, set alerts, access earnings calendar after quick signup.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card p-4 shadow-sm rounded text-center bg-white">
+          <h5>Pro Members</h5>
+          <p>Exclusive access to backtesting, AI signals, advanced screeners & options analysis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="membership-content py-5 bg-light">
+  <div class="container text-center">
+
+    <div class="free-only">
+      <h4>Welcome Free Member</h4>
+      <p>Enjoy basic screeners, market data, and limited tools.</p>
+    </div>
+
+    <div class="pro-only">
+      <h4>Welcome Pro Member</h4>
+      <p>Full access to AI signals, backtesting, and premium screeners.</p>
+    </div>
+
+    <div class="guest-only">
+      <h4>Guest Access</h4>
+      <p>Please login or signup to unlock all features.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Pricing Call to Action -->
+<section class="pricing-cta py-5 bg-light text-center">
+  <div class="container">
+    <h2 class="fw-bold">Unlock Full Power with Pro</h2>
+    <p class="lead">Flexible monthly and yearly plans available. Start your quant journey today!</p>
+    <a href="#" class="btn btn-lg btn-primary">View Pricing</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-4 bg-dark text-white text-center">
+  <div class="container">
+    <p>© 2025 QuantJuice. All rights reserved.</p>
+    <small>Privacy Policy | Terms of Service | Contact Us</small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/auth.js"></script>
+
+</body>
+</html>
+ 

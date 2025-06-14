@@ -1,0 +1,122 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FDFBFA;  /* premium cream tone */
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.navbar-brand {
+    color: #7B3FE4 !important;  /* royal purple */
+}
+
+.hero {
+    background: linear-gradient(135deg, #2A399B, #ED53CC);
+    color: white;
+    padding: 30px 0;
+}
+
+.btn-success, .btn-primary, .btn-outline-primary, .btn-gradient-primary {
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 0;
+    border: none;
+    background: linear-gradient(135deg, #2A399B, #5A189A);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover, .btn-primary:hover, .btn-gradient-primary:hover {
+    background: linear-gradient(135deg, #2A399B, #3C096C);
+    box-shadow: 0 6px 16px rgba(90, 24, 154, 0.4);
+}
+
+.btn-outline-primary {
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+}
+
+.btn-outline-primary:hover {
+    background: #fff;
+    color: #7B3FE4;
+    border: 2px solid #fff;
+}
+
+.market-strip {
+    background-color: #FFFFFF;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+.feature-card {
+    background-color: #fff;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+}
+
+.pricing-cta {
+    background-color: #FAF9F8;
+}
+
+footer {
+    background-color: #111827;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.modal-content {
+    border-radius: 0 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.dropdown-menu {
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+h1, h2, h5 {
+    letter-spacing: -0.5px;
+}
+
+
+/* Account button specifically (more luxury feel) */
+.btn-account {
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 0;
+    border: none;
+    background: white;
+    color: #fff;
+}
+
+.btn-account:hover {
+    background: #2A399B;
+    box-shadow: 0 6px 16px rgba(90, 24, 154, 0.4);
+}
+
+/* Pricing Call to Action Section */
+.pricing-cta {
+    background: linear-gradient(135deg, #f5ece4, #EFEAE4);
+    padding: 80px 20px;
+    color: #222;
+}
+
+.pricing-cta h2 {
+    color: #5A189A;
+}
