@@ -177,7 +177,7 @@ function handleUserRole(role) {
     guestNotice.forEach(e => e.style.display = "none");
   } else {
     proTools.forEach(e => e.style.display = "none");
-    freeTools.forEach(e => e.style.display = "none");
+    freeTools.forEach(e => e.style.display = "block");
     guestNotice.forEach(e => e.style.display = "block");
   }
 }
