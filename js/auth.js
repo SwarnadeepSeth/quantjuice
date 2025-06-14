@@ -120,7 +120,7 @@ window.login = async function() {
 // Logout
 window.logout = async function() {
   try {
-    await signOut(auth);
+    await signOut(auth others);
     showAlert("Logged out!");
     updateUIForGuest();
   } catch (error) {
@@ -154,6 +154,9 @@ function handleUserRole(role) {
   const freeTools = document.querySelectorAll('.free-only');
   const guestNotice = document.querySelectorAll('.guest-only');
 
+  // Log for debugging
+  console.log(`Handling role: ${role}, proTools: ${proTools.length}, freeTools: ${freeTools.length}, guestNotice: ${guestNotice.length}`);
+
   if (role === "pro") {
     proTools.forEach(e => e.style.display = "block");
     freeTools.forEach(e => e.style.display = "block");
@@ -173,36 +176,80 @@ function handleUserRole(role) {
 
 // UI updates on login
 function updateUIForUser(user) {
+  // Log for debugging
+  console.log("Updating UI for user:", user.email);
+
   // Hide signup and login dropdown items, show logout
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
-  
-  if (signupLink) signupLink.style.display = "none";
-  if (loginLink) loginLink.style.display = "none";
-  if (logoutLink) logoutLink.style.display = "block";
-  
+
+  // Log which elements are found
+  console.log("signupLink:", signupLink ? "found" : "null");
+  console.log("loginLink:", loginLink ? "found" : "null");
+  console.log("logoutLink:", logoutLink ? "found" : "null");
+
+  if (signupLink) {
+    signupLink.style.display = "none";
+  } else {
+    console.warn("Signup link not found in DOM");
+  }
+  if (loginLink) {
+    loginLink.style.display = "none";
+  } else {
+    console.warn("Login link not found in DOM");
+  }
+  if (logoutLink) {
+    logoutLink.style.display = "block";
+  } else {
+    console.warn("Logout link not found in DOM");
+  }
+
   // Update welcome message if welcomeUser element exists
   const welcomeUser = document.getElementById("welcomeUser");
   if (welcomeUser) {
     welcomeUser.textContent = `Welcome, ${user.email}`;
+  } else {
+    console.warn("welcomeUser element not found in DOM");
   }
 }
 
 // UI updates on logout / guest
 function updateUIForGuest() {
+  // Log for debugging
+  console.log("Updating UI for guest");
+
   // Show signup and login dropdown items, hide logout
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
-  
-  if (signupLink) signupLink.style.display = "block";
-  if (loginLink) loginLink.style.display = "block";
-  if (logoutLink) logoutLink.style.display = "none";
-  
+
+  // Log which elements are found
+  console.log("signupLink:", signupLink ? "found" : "null");
+  console.log("loginLink:", loginLink ? "found" : "null");
+  console.log("logoutLink:", logoutLink ? "found" : "null");
+
+  if (signupLink) {
+    signupLink.style.display = "block";
+  } else {
+    console.warn("Signup link not found in DOM");
+  }
+  if (loginLink) {
+    loginLink.style.display = "block";
+  } else {
+    console.warn("Login link not found in DOM");
+  }
+  if (logoutLink) {
+    logoutLink.style.display = "none";
+  } else {
+    console.warn("Logout link not found in DOM");
+  }
+
   // Clear welcome message if welcomeUser element exists
   const welcomeUser = document.getElementById("welcomeUser");
   if (welcomeUser) {
     welcomeUser.textContent = "";
+  } else {
+    console.warn("welcomeUser element not found in DOM");
   }
 }
