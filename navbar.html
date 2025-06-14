@@ -49,4 +49,29 @@
     </div>
   </div>
 </nav>
- 
+
+<!-- Signup Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Create Account</h5>
+      <input type="email" id="signupEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="signupPassword" class="form-control mb-3" placeholder="Password">
+      <button id="signupBtn" class="btn btn-primary w-100 mb-2" onclick="signup()">Sign Up</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Login</h5>
+      <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
+      <button id="loginBtn" class="btn btn-success w-100 mb-2" onclick="login()">Login</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
