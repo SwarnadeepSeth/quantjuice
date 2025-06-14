@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Paste your Firebase config here:
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyDRxjPtMA7QXxwaBKx8LT0vw4EK8EeGIns",
     authDomain: "quantjuice.firebaseapp.com",
@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Utility: show alert and optionally focus input
+// Utility: show alert
 function showAlert(message) {
   alert(message);
 }
@@ -76,7 +76,6 @@ window.signup = async function() {
 
     showAlert("Account created successfully!");
     updateUIForUser(user);
-    // Close the signup modal
     const signupModal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
     signupModal.hide();
   } catch (error) {
@@ -107,7 +106,6 @@ window.login = async function() {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     showAlert("Logged in successfully!");
     updateUIForUser(userCredential.user);
-    // Close the login modal
     const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
     loginModal.hide();
   } catch (error) {
@@ -120,7 +118,7 @@ window.login = async function() {
 // Logout
 window.logout = async function() {
   try {
-    await signOut(auth others);
+    await signOut(auth);
     showAlert("Logged out!");
     updateUIForGuest();
   } catch (error) {
@@ -129,23 +127,25 @@ window.logout = async function() {
 }
 
 // Auto-check login status + load role
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const docSnap = await getDoc(doc(db, "users", user.uid));
-    if (docSnap.exists()) {
-      const role = docSnap.data().role;
-      console.log("Logged in user role:", role);
-      handleUserRole(role);
-      updateUIForUser(user);
+document.addEventListener('DOMContentLoaded', () => {
+  onAuthStateChanged(auth, async (user) => {
+    console.log("Auth state changed, user:", user ? user.email : "null");
+    if (user) {
+      const docSnap = await getDoc(doc(db, "users", user.uid));
+      if (docSnap.exists()) {
+        const role = docSnap.data().role;
+        console.log("Logged in user role:", role);
+        handleUserRole(role);
+        updateUIForUser(user);
+      } else {
+        handleUserRole("free");
+        updateUIForUser(user);
+      }
     } else {
-      // User document missing, fallback
-      handleUserRole("free");
-      updateUIForUser(user);
+      handleUserRole("guest");
+      updateUIForGuest();
     }
-  } else {
-    handleUserRole("guest");
-    updateUIForGuest();
-  }
+  });
 });
 
 // Handle access UI elements
@@ -154,20 +154,17 @@ function handleUserRole(role) {
   const freeTools = document.querySelectorAll('.free-only');
   const guestNotice = document.querySelectorAll('.guest-only');
 
-  // Log for debugging
   console.log(`Handling role: ${role}, proTools: ${proTools.length}, freeTools: ${freeTools.length}, guestNotice: ${guestNotice.length}`);
 
   if (role === "pro") {
     proTools.forEach(e => e.style.display = "block");
     freeTools.forEach(e => e.style.display = "block");
     guestNotice.forEach(e => e.style.display = "none");
-  }
-  else if (role === "free") {
+  } else if (role === "free") {
     proTools.forEach(e => e.style.display = "none");
     freeTools.forEach(e => e.style.display = "block");
     guestNotice.forEach(e => e.style.display = "none");
-  }
-  else { // guest
+  } else { // guest
     proTools.forEach(e => e.style.display = "none");
     freeTools.forEach(e => e.style.display = "none");
     guestNotice.forEach(e => e.style.display = "block");
@@ -176,15 +173,12 @@ function handleUserRole(role) {
 
 // UI updates on login
 function updateUIForUser(user) {
-  // Log for debugging
   console.log("Updating UI for user:", user.email);
 
-  // Hide signup and login dropdown items, show logout
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
 
-  // Log which elements are found
   console.log("signupLink:", signupLink ? "found" : "null");
   console.log("loginLink:", loginLink ? "found" : "null");
   console.log("logoutLink:", logoutLink ? "found" : "null");
@@ -205,7 +199,6 @@ function updateUIForUser(user) {
     console.warn("Logout link not found in DOM");
   }
 
-  // Update welcome message if welcomeUser element exists
   const welcomeUser = document.getElementById("welcomeUser");
   if (welcomeUser) {
     welcomeUser.textContent = `Welcome, ${user.email}`;
@@ -216,15 +209,12 @@ function updateUIForUser(user) {
 
 // UI updates on logout / guest
 function updateUIForGuest() {
-  // Log for debugging
   console.log("Updating UI for guest");
 
-  // Show signup and login dropdown items, hide logout
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
 
-  // Log which elements are found
   console.log("signupLink:", signupLink ? "found" : "null");
   console.log("loginLink:", loginLink ? "found" : "null");
   console.log("logoutLink:", logoutLink ? "found" : "null");
@@ -245,7 +235,6 @@ function updateUIForGuest() {
     console.warn("Logout link not found in DOM");
   }
 
-  // Clear welcome message if welcomeUser element exists
   const welcomeUser = document.getElementById("welcomeUser");
   if (welcomeUser) {
     welcomeUser.textContent = "";
