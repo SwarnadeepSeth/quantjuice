@@ -1,5 +1,4 @@
 // Basic market data simulation (replace with real API later)
-
 document.addEventListener("DOMContentLoaded", function() {
     const data = [
         { index: "NIFTY 50", value: "22,450", change: "+0.42%" },
@@ -18,4 +17,17 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>`;
     });
 });
- 
+
+// Your Stripe publishable key
+const stripe = Stripe('pk_test_51RZlAdRtfVnx9vNJuXLlxGSLdlLYbJOFotizf4ngpFrbK9IQz19xsd93BsanCZvvEJyNpYZDwil0qGOptUqpzbQF00HKj5CAEu');
+
+async function startCheckout() {
+  const response = await fetch('/create-checkout-session');  // Backend call
+  const session = await response.json();
+  const result = await stripe.redirectToCheckout({
+    sessionId: session.id
+  });
+  if (result.error) {
+    alert(result.error.message);
+  }
+}

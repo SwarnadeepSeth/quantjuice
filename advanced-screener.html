@@ -1,0 +1,286 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuantJuice - Advanced Screeners (Pro)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar (same as index.html) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-3 text-primary" href="index.html">QuantJuice</a>
+    <span id="welcomeUser" class="navbar-text ms-2"></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Market</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Market Overview</a></li>
+            <li><a class="dropdown-item" href="#">Top Gainers/Losers</a></li>
+            <li><a class="dropdown-item" href="#">Volume Spike</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Screeners</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Basic Screeners</a></li>
+            <li><a class="dropdown-item" href="advanced-screener.html">Advanced Screeners (Pro)</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Tools</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Watchlist & Alerts (Free)</a></li>
+            <li><a class="dropdown-item" href="#">Backtesting (Pro)</a></li>
+            <li><a class="dropdown-item" href="#">Options Lab (Pro)</a></li>
+            <li><a class="dropdown-item" href="#">AI Signals (Pro)</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+        <li class="nav-item dropdown">
+          <a class="btn btn-account ms-3 dropdown-toggle" href="#" data-bs-toggle="dropdown">Account</a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Signup Modal (same as index.html) -->
+<div class="modal fade" id="signupModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Create Account</h5>
+      <input type="email" id="signupEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="signupPassword" class="form-control mb-3" placeholder="Password">
+      <button id="signupBtn" class="btn btn-primary w-100 mb-2" onclick="signup()">Sign Up</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal (same as index.html) -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <h5 class="modal-title mb-3">Login</h5>
+      <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email">
+      <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
+      <button id="loginBtn" class="btn btn-success w-100 mb-2" onclick="login()">Login</button>
+      <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advanced Screeners Section (Pro-only) -->
+<section class="advanced-screeners py-5 bg-light pro-only">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Advanced Screeners (Pro)</h2>
+      <p class="lead">Powerful stock screeners for professional traders. Exclusive to Pro members.</p>
+    </div>
+
+    <!-- Price Action Screeners -->
+    <h3 class="fw-bold mb-4">Price Action Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Breakout Screener</h5>
+            <p class="card-text">Identify stocks breaking out of key resistance levels with high volume confirmation.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Pullback Screener</h5>
+            <p class="card-text">Find stocks in an uptrend experiencing short-term pullbacks to support levels.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Range-Bound Screener</h5>
+            <p class="card-text">Detect stocks trading within a defined price range, ideal for range trading strategies.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Momentum Screeners -->
+    <h3 class="fw-bold mb-4">Momentum Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">High Momentum Screener</h5>
+            <p class="card-text">Screen for stocks with strong upward momentum based on RSI and price velocity.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Volume Surge Screener</h5>
+            <p class="card-text">Identify stocks with unusual volume spikes indicating potential momentum shifts.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Trend Reversal Screener</h5>
+            <p class="card-text">Find stocks showing early signs of momentum reversal using MACD and stochastic indicators.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Renko Screener</h5>
+            <p class="card-text">Find stocks based on breakout on Renko chart.</p>
+            <button class="btn btn-primary w-100" onclick="window.location.href='http://129.80.135.128:8501/'">Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fundamental Screeners -->
+    <h3 class="fw-bold mb-4">Fundamental Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Value Screener</h5>
+            <p class="card-text">Discover undervalued stocks based on low P/E, P/B, and high dividend yield.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Growth Screener</h5>
+            <p class="card-text">Find high-growth stocks with strong revenue and earnings growth over multiple quarters.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Dividend Screener</h5>
+            <p class="card-text">Screen for stable companies with consistent dividend payments and strong cash flow.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined Screeners -->
+    <h3 class="fw-bold mb-4">Combined Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Growth at a Reasonable Price</h5>
+            <p class="card-text">Combine value and growth metrics to find stocks with strong fundamentals and fair valuation.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Momentum + Fundamentals</h5>
+            <p class="card-text">Screen for stocks with strong momentum and solid financials for balanced trading.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Breakout + Fundamentals</h5>
+            <p class="card-text">Identify breakout stocks with strong fundamentals to reduce false signals.</p>
+            <button class="btn btn-primary w-100" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer (same as index.html) -->
+<footer class="py-4 bg-dark text-white text-center">
+  <div class="container">
+    <p>© 2025 QuantJuice. All rights reserved.</p>
+    <small>Privacy Policy | Terms of Service | Contact Us</small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>
