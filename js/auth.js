@@ -7,7 +7,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyDRxjPtMA7QXxwaBKx8LT0vw4EK8EeGIns",
     authDomain: "quantjuice.firebaseapp.com",
     projectId: "quantjuice",
-    storageBucket: "quantjuice.firebasestorage.app",
+    storageBucket: "quantjuice.appspot.com",
     messagingSenderId: "753106567693",
     appId: "1:753106567693:web:cfb3d2b7d3ef23d86ecb44",
     measurementId: "G-1TGRTKVG9G"
@@ -76,12 +76,7 @@ window.signup = async function() {
 
     showAlert("Account created successfully!");
     updateUIForUser(user);
-
-    const signupModalElement = document.getElementById('signupModal');
-    if (signupModalElement) {
-      const signupModal = bootstrap.Modal.getInstance(signupModalElement) || new bootstrap.Modal(signupModalElement);
-      signupModal.hide();
-    }
+    closeModal('signupModal');
   } catch (error) {
     showAlert("Error: " + getFriendlyErrorMessage(error));
   } finally {
@@ -110,12 +105,7 @@ window.login = async function() {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     showAlert("Logged in successfully!");
     updateUIForUser(userCredential.user);
-
-    const loginModalElement = document.getElementById('loginModal');
-    if (loginModalElement) {
-      const loginModal = bootstrap.Modal.getInstance(loginModalElement) || new bootstrap.Modal(loginModalElement);
-      loginModal.hide();
-    }
+    closeModal('loginModal');
   } catch (error) {
     showAlert("Error: " + getFriendlyErrorMessage(error));
   } finally {
@@ -129,109 +119,107 @@ window.logout = async function() {
     await signOut(auth);
     showAlert("Logged out!");
     updateUIForGuest();
+    handleUserRole("guest");
   } catch (error) {
     showAlert("Error: " + getFriendlyErrorMessage(error));
   }
 }
 
-// Auto-check login status + load role
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    try {
-      const docSnap = await getDoc(doc(db, "users", user.uid));
-      if (docSnap.exists()) {
-        const role = docSnap.data().role;
-        console.log("Logged in user role:", role);
-        handleUserRole(role);
-        updateUIForUser(user);
-      } else {
-        handleUserRole("free");
-        updateUIForUser(user);
-      }
-    } catch (error) {
-      console.error("Error fetching user role:", error);
-      handleUserRole("free");
-      updateUIForUser(user);
-    }
-  } else {
-    handleUserRole("guest");
-    updateUIForGuest();
+// Close modal helper
+function closeModal(modalId) {
+  const modalElement = document.getElementById(modalId);
+  if (modalElement) {
+    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modal.hide();
   }
-});
+}
 
-// Handle access UI elements
+// Role handling function
 function handleUserRole(role) {
-  const proTools = document.querySelectorAll('.pro-only');
-  const freeTools = document.querySelectorAll('.free-only');
   const guestNotice = document.querySelectorAll('.guest-only');
+  const accessElements = document.querySelectorAll('[data-access]');
 
-  console.log(`Handling role: ${role}, proTools: ${proTools.length}, freeTools: ${freeTools.length}, guestNotice: ${guestNotice.length}`);
+  console.log(`Handling role: ${role}, found ${accessElements.length} controlled elements.`);
 
-  if (role === "pro") {
-    proTools.forEach(e => e.style.display = "block");
-    freeTools.forEach(e => e.style.display = "block");
-    guestNotice.forEach(e => e.style.display = "none");
-  } else if (role === "free") {
-    proTools.forEach(e => e.style.display = "none");
-    freeTools.forEach(e => e.style.display = "block");
+  // Guest notice toggle
+  if (role === "pro" || role === "free") {
     guestNotice.forEach(e => e.style.display = "none");
   } else {
-    proTools.forEach(e => e.style.display = "none");
-    freeTools.forEach(e => e.style.display = "block");
     guestNotice.forEach(e => e.style.display = "block");
   }
+
+  // Universal access control
+  accessElements.forEach(elem => {
+    const accessLevel = elem.dataset.access;
+
+    let allow = false;
+    if (accessLevel === "pro" && role === "pro") allow = true;
+    if (accessLevel === "free" && (role === "free" || role === "pro")) allow = true;
+    if (accessLevel === "guest") allow = true;
+
+    if (elem.tagName === "BUTTON") {
+      elem.disabled = !allow;
+    } else if (elem.tagName === "A") {
+      if (allow) {
+        elem.classList.remove("disabled");
+        elem.style.pointerEvents = "auto";
+        elem.style.opacity = 1;
+      } else {
+        elem.classList.add("disabled");
+        elem.style.pointerEvents = "none";
+        elem.style.opacity = 0.5;
+      }
+    }
+  });
 }
 
 // UI updates on login
 function updateUIForUser(user) {
   console.log("Updating UI for user:", user.email);
-
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
 
-  console.log("signupLink:", signupLink ? "found" : "null");
-  console.log("loginLink:", loginLink ? "found" : "null");
-  console.log("logoutLink:", logoutLink ? "found" : "null");
-
   if (signupLink) signupLink.style.display = "none";
-  else console.warn("Signup link not found in DOM");
   if (loginLink) loginLink.style.display = "none";
-  else console.warn("Login link not found in DOM");
   if (logoutLink) logoutLink.style.display = "block";
-  else console.warn("Logout link not found in DOM");
 
   const welcomeUser = document.getElementById("welcomeUser");
-  if (welcomeUser) {
-    welcomeUser.textContent = `Welcome, ${user.email}`;
-  } else {
-    console.warn("welcomeUser element not found in DOM");
-  }
+  if (welcomeUser) welcomeUser.textContent = `Welcome, ${user.email}`;
 }
 
 // UI updates on logout / guest
 function updateUIForGuest() {
   console.log("Updating UI for guest");
-
   const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
   const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
   const logoutLink = document.querySelector('a[onclick="logout()"]');
 
-  console.log("signupLink:", signupLink ? "found" : "null");
-  console.log("loginLink:", loginLink ? "found" : "null");
-  console.log("logoutLink:", logoutLink ? "found" : "null");
-
   if (signupLink) signupLink.style.display = "block";
-  else console.warn("Signup link not found in DOM");
   if (loginLink) loginLink.style.display = "block";
-  else console.warn("Login link not found in DOM");
   if (logoutLink) logoutLink.style.display = "none";
-  else console.warn("Logout link not found in DOM");
 
   const welcomeUser = document.getElementById("welcomeUser");
-  if (welcomeUser) {
-    welcomeUser.textContent = "";
-  } else {
-    console.warn("welcomeUser element not found in DOM");
-  }
+  if (welcomeUser) welcomeUser.textContent = "";
 }
+
+// Main logic triggered AFTER DOM fully loaded:
+window.addEventListener('DOMContentLoaded', () => {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const docSnap = await getDoc(doc(db, "users", user.uid));
+        const role = docSnap.exists() ? docSnap.data().role : "free";
+        handleUserRole(role);
+        updateUIForUser(user);
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+        handleUserRole("free");
+        updateUIForUser(user);
+      }
+    } else {
+      handleUserRole("guest");
+      updateUIForGuest();
+    }
+  });
+});
