@@ -12,7 +12,7 @@ const firebaseConfig = {
     messagingSenderId: "753106567693",
     appId: "1:753106567693:web:cfb3d2b7d3ef23d86ecb44",
     measurementId: "G-1TGRTKVG9G"
-  };
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -173,17 +173,36 @@ function handleUserRole(role) {
 
 // UI updates on login
 function updateUIForUser(user) {
-  // Example: Hide login/signup, show logout button, display welcome message
-  document.getElementById("loginSection").style.display = "none";
-  document.getElementById("signupSection").style.display = "none";
-  document.getElementById("logoutSection").style.display = "block";
-  document.getElementById("welcomeUser").textContent = `Welcome, ${user.email}`;
+  // Hide signup and login dropdown items, show logout
+  const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
+  const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
+  const logoutLink = document.querySelector('a[onclick="logout()"]');
+  
+  if (signupLink) signupLink.style.display = "none";
+  if (loginLink) loginLink.style.display = "none";
+  if (logoutLink) logoutLink.style.display = "block";
+  
+  // Update welcome message if welcomeUser element exists
+  const welcomeUser = document.getElementById("welcomeUser");
+  if (welcomeUser) {
+    welcomeUser.textContent = `Welcome, ${user.email}`;
+  }
 }
 
 // UI updates on logout / guest
 function updateUIForGuest() {
-  document.getElementById("loginSection").style.display = "block";
-  document.getElementById("signupSection").style.display = "block";
-  document.getElementById("logoutSection").style.display = "none";
-  document.getElementById("welcomeUser").textContent = "";
+  // Show signup and login dropdown items, hide logout
+  const signupLink = document.querySelector('a[data-bs-target="#signupModal"]');
+  const loginLink = document.querySelector('a[data-bs-target="#loginModal"]');
+  const logoutLink = document.querySelector('a[onclick="logout()"]');
+  
+  if (signupLink) signupLink.style.display = "block";
+  if (loginLink) loginLink.style.display = "block";
+  if (logoutLink) logoutLink.style.display = "none";
+  
+  // Clear welcome message if welcomeUser element exists
+  const welcomeUser = document.getElementById("welcomeUser");
+  if (welcomeUser) {
+    welcomeUser.textContent = "";
+  }
 }
