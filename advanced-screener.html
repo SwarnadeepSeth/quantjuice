@@ -14,7 +14,7 @@
 <!-- Navbar -->
 <div id="navbar-placeholder"></div>
 
-<!-- Advanced Screeners Section (Registered and Pro access) -->
+<!-- Advanced Screeners Section -->
 <section class="advanced-screeners py-5 bg-light">
   <div class="container">
     <div class="text-center mb-5">
@@ -22,148 +22,151 @@
       <p class="lead">Powerful stock screeners exclusive to Pro members. Unlock advanced analytics.</p>
     </div>
 
-    <!-- Restricted Access Message -->
-    <div class="guest-only text-center">
+    <!-- Guest Message -->
+    <div class="guest-only text-center mb-5">
       <h3 class="mb-4">Free/Pro Membership Required</h3>
       <p class="lead mb-4">You need to sign up or upgrade to a Pro membership to access Advanced Screeners.</p>
       <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up Now</button>
       <p class="mt-3">Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></p>
     </div>
 
-    <div class="free-only">
-      <!-- Price Action Screeners -->
-      <h3 class="fw-bold mb-4">Price Action Screeners</h3>
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Breakout Screener</h5>
-              <p class="card-text">Identify stocks breaking out of key resistance levels with high volume confirmation.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Pullback Screener</h5>
-              <p class="card-text">Find stocks in an uptrend experiencing short-term pullbacks to support levels.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Range-Bound Screener</h5>
-              <p class="card-text">Detect stocks trading within a defined price range, ideal for range trading strategies.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 pro-only">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Renko Screener</h5>
-              <p class="card-text">Find stocks based on breakout on Renko chart.</p>
-              <a href="http://129.80.135.128:8501/" class="btn btn-primary w-100" target="_blank">Run Screener</a>
-            </div>
+    <!-- Price Action Screeners -->
+    <h3 class="fw-bold mb-4">Price Action Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Breakout Screener</h5>
+            <p class="card-text">Identify stocks breaking out of key resistance levels with high volume confirmation.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
       </div>
-
-      <!-- Momentum Screeners -->
-      <h3 class="fw-bold mb-4">Momentum Screeners</h3>
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">High Momentum Screener</h5>
-              <p class="card-text">Screen for stocks with strong upward momentum based on RSI and price velocity.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Volume Surge Screener</h5>
-              <p class="card-text">Identify stocks with unusual volume spikes indicating potential momentum shifts.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Trend Reversal Screener</h5>
-              <p class="card-text">Find stocks showing early signs of momentum reversal using MACD and stochastic indicators.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Pullback Screener</h5>
+            <p class="card-text">Find stocks in an uptrend experiencing short-term pullbacks to support levels.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
       </div>
-
-      <!-- Fundamental Screeners -->
-      <h3 class="fw-bold mb-4">Fundamental Screeners</h3>
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Value Screener</h5>
-              <p class="card-text">Discover undervalued stocks based on low P/E, P/B, and high dividend yield.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Growth Screener</h5>
-              <p class="card-text">Find high-growth stocks with strong revenue and earnings growth over multiple quarters.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Dividend Screener</h5>
-              <p class="card-text">Screen for stable companies with consistent dividend payments and strong cash flow.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Range-Bound Screener</h5>
+            <p class="card-text">Detect stocks trading within a defined price range, ideal for range trading strategies.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
       </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Renko Screener</h5>
+            <p class="card-text">Find stocks based on breakout on Renko chart.</p>
+            <a href="http://129.80.135.128:8501/" 
+              class="btn btn-primary w-100" 
+              target="_blank" 
+              data-access="free">
+              Run Screener
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <!-- Combined Screeners -->
-      <h3 class="fw-bold mb-4">Combined Screeners</h3>
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Growth at a Reasonable Price</h5>
-              <p class="card-text">Combine value and growth metrics to find stocks with strong fundamentals and fair valuation.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
+    <!-- Momentum Screeners -->
+    <h3 class="fw-bold mb-4">Momentum Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">High Momentum Screener</h5>
+            <p class="card-text">Screen for stocks with strong upward momentum based on RSI and price velocity.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Momentum + Fundamentals</h5>
-              <p class="card-text">Screen for stocks with strong momentum and solid financials for balanced trading.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Volume Surge Screener</h5>
+            <p class="card-text">Identify stocks with unusual volume spikes indicating potential momentum shifts.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Breakout + Fundamentals</h5>
-              <p class="card-text">Identify breakout stocks with strong fundamentals to reduce false signals.</p>
-              <button class="btn btn-primary w-100" disabled>Run Screener</button>
-            </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Trend Reversal Screener</h5>
+            <p class="card-text">Find stocks showing early signs of momentum reversal using MACD and stochastic indicators.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fundamental Screeners -->
+    <h3 class="fw-bold mb-4">Fundamental Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Value Screener</h5>
+            <p class="card-text">Discover undervalued stocks based on low P/E, P/B, and high dividend yield.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Growth Screener</h5>
+            <p class="card-text">Find high-growth stocks with strong revenue and earnings growth over multiple quarters.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Dividend Screener</h5>
+            <p class="card-text">Screen for stable companies with consistent dividend payments and strong cash flow.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined Screeners -->
+    <h3 class="fw-bold mb-4">Combined Screeners</h3>
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Growth at a Reasonable Price</h5>
+            <p class="card-text">Combine value and growth metrics to find stocks with strong fundamentals and fair valuation.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Momentum + Fundamentals</h5>
+            <p class="card-text">Screen for stocks with strong momentum and solid financials for balanced trading.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Breakout + Fundamentals</h5>
+            <p class="card-text">Identify breakout stocks with strong fundamentals to reduce false signals.</p>
+            <button class="btn btn-primary w-100 access-pro" disabled>Run Screener</button>
           </div>
         </div>
       </div>
@@ -189,6 +192,7 @@
     .then(data => {
       document.getElementById('navbar-placeholder').innerHTML = data;
     });
+
 </script>
 
 </body>
