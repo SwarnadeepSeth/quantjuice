@@ -2,16 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/fireba
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyDRxjPtMA7QXxwaBKx8LT0vw4EK8EeGIns",
-    authDomain: "quantjuice.firebaseapp.com",
-    projectId: "quantjuice",
-    storageBucket: "quantjuice.appspot.com",
-    messagingSenderId: "753106567693",
-    appId: "1:753106567693:web:cfb3d2b7d3ef23d86ecb44",
-    measurementId: "G-1TGRTKVG9G"
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
